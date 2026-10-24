@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17132b">
+  <meta name="description" content="เกมตบปากไลฟ์สด แตะให้ทันก่อนพูดครบห้าวินาที!">
+  <title>ไลฟ์อีกแล้ว! — Mouth Patrol</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon">📱</span><div><p>MOUTH PATROL • เกมจับจังหวะ</p><h1>ไลฟ์อีกแล้ว! <span>😵‍💫</span></h1></div></div>
+      <button id="soundButton" class="sound" type="button" aria-pressed="true" aria-label="ปิดเสียง">🔊</button>
+    </header>
+    <section class="hud" aria-live="polite">
+      <div><small>คะแนน</small><strong id="score">0</strong></div>
+      <div class="combo"><small>คอมโบ</small><strong id="combo">0🔥</strong></div>
+      <div class="misses"><small>หลุดไลฟ์</small><strong id="misses">0/3</strong></div>
+      <div class="clock"><small>ก่อนครบ 5 วิ</small><strong id="clock">—</strong></div>
+      <div class="best"><small>สถิติสูงสุดเครื่องนี้</small><strong id="best">0</strong></div>
+      <div class="online-best"><small>อันดับ 1 ออนไลน์</small><strong id="onlineBest">ยังไม่เชื่อม</strong></div>
+    </section>
+    <section class="stage-wrap">
+      <canvas id="stage" aria-label="แตะหรือคลิกปากคนที่กำลังไลฟ์ เพื่อปิดด้วยพลาสเตอร์"></canvas>
+      <div id="toast" class="toast" aria-live="assertive"></div>
+      <div id="intro" class="overlay">
+        <div class="card">
+          <div class="hero">🤳🩹</div>
+          <p class="eyebrow">เกมไว มือไว ก่อนเพื่อนบ้านได้ยินทั้งซอย</p>
+          <h2>เขาเริ่มไลฟ์อีกแล้ว!</h2>
+          <p>รอดูหน้าเด้งเข้าจอ แล้ว<strong>แตะหรือคลิกที่ปาก</strong>ให้ติดพลาสเตอร์ก่อนพูดครบ 5 วินาที</p>
+          <p class="note">พลาดครบ 3 คน = แพ้<br>ปิดปากทัน คะแนนกับคอมโบไหลต่อเนื่อง!</p>
+          <form id="profileForm" class="profile-form">
+            <label for="playerName">ชื่อที่ใช้แข่งบนตารางออนไลน์</label>
+            <input id="playerName" maxlength="18" autocomplete="nickname" placeholder="พิมพ์ชื่อเล่นของคุณ" required>
+            <button id="startButton" class="start" type="submit">เริ่มภารกิจ 🤫</button>
+          </form>
+        </div>
+      </div>
+      <div id="ending" class="overlay hidden">
+        <div class="card">
+          <div id="endingFace" class="hero">😤🩹</div>
+          <p class="eyebrow">ไลฟ์เงียบลงแล้ว… ชั่วคราว</p>
+          <h2>ครบสามไลฟ์ หลุดมือ!</h2>
+          <p id="endingText"></p>
+          <section class="online-board" aria-live="polite">
+            <h3>🏆 อันดับออนไลน์</h3>
+            <p id="onlineStatus" class="online-status">กำลังตรวจการเชื่อมต่อ…</p>
+            <ol id="onlineScores" class="online-scores"><li>กำลังโหลดคะแนน…</li></ol>
+          </section>
+          <button id="againButton" class="start" type="button">ลองใหม่อีกที 🔁</button>
+        </div>
+      </div>
+    </section>
+    <footer>แตะ/คลิกปากเพื่อแปะพลาสเตอร์ • คนไลฟ์แต่ละคนมีอารมณ์และงานอดิเรกไม่ซ้ำกัน</footer>
+  </main>
+  <script src="supabase-config.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
