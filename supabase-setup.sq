@@ -1,0 +1,47 @@
+-- Run once in Supabase Dashboard > SQL Editor.
+-- One permanent browser profile = one leaderboard row. The RPC keeps the best score only.
+create table if not exists public.mouth_scores (
+  id bigint generated always as identity primary key,
+  player_id uuid not null unique,
+  player_name text not null check (char_length(btrim(player_name)) between 1 and 18),
+  score integer not null check (score between 0 and 10000000),
+  created_at timestamptz not null default now()
+);
+
+-- Safe migration for an earlier version of the table. Old anonymous score rows stay visible.
+alter table public.mouth_scores add column if not exists player_id uuid;
+create unique index if not exists mouth_scores_player_id_uidx on public.mouth_scores(player_id);
+create index if not exists mouth_scores_score_rank_idx on public.mouth_scores(score desc, created_at asc);
+
+alter table public.mouth_scores enable row level security;
+grant usage on schema public to anon, authenticated;
+grant select on table public.mouth_scores to anon, authenticated;
+revoke insert, update, delete on table public.mouth_scores from anon, authenticated;
+
+drop policy if exists "Anyone can read leaderboard" on public.mouth_scores;
+create policy "Anyone can read leaderboard"
+  on public.mouth_scores for select to anon, authenticated using (true);
+
+create or replace function public.submit_mouth_score(p_player_id uuid, p_player_name text, p_score integer)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if p_player_id is null
+     or char_length(btrim(coalesce(p_player_name, ''))) not between 1 and 18
+     or p_score not between 1 and 10000000 then
+    raise exception 'Invalid player name or score';
+  end if;
+
+  insert into public.mouth_scores (player_id, player_name, score)
+  values (p_player_id, btrim(p_player_name), p_score)
+  on conflict (player_id) do update
+    set player_name = excluded.player_name,
+        score = greatest(mouth_scores.score, excluded.score);
+end;
+$$;
+
+revoke all on function public.submit_mouth_score(uuid, text, integer) from public;
+grant execute on function public.submit_mouth_score(uuid, text, integer) to anon, authenticated;
