@@ -2,6 +2,6 @@
 // This file is loaded by the public website, so use ONLY the publishable/anon key.
 // Never put a Supabase secret key or service_role key in this file.
 window.MOUTH_PATROL_DB = {
-  url: 'https://jraffvcqyivpxyjvhnxn.supabase.co',
-  publishableKey: ''
+  url: 'https://ukqoqcpfkbyhrxkmkeub.supabase.co',
+  publishableKey: 'sb_publishable_vBWdpdF6FRy7PF0gfA6XpA_-tuC5v8E'
 };
